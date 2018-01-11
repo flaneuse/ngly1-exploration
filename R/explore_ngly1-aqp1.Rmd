@@ -1,0 +1,162 @@
+---
+title: "Initial test exploration of NGLY1-AQP1 pathways"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Purpose
+Explore whether there are superior ways of representing relationships between two terms in a graph network using a test set of nodes (NGLY1 and AQP1 human genes)
+
+# Background
+
+# Pathways
+All pathways were calculated within [neo4j](https://neo4j.com/). Links between NGLY1, human gene, and AQP1, human gene were calculated within 3-4 edges.
+
+
+## neo4j code:
+```{bash, eval = FALSE}
+# Navigate to the graph
+http://52.87.232.110:7474/browser/
+
+# User guide for preset code
+:play http://52.87.232.110:8001/guides/top-secret/guide.html
+ 
+# code for **neo4j_ngly1-aqp1.csv**: All connections within 3 path lengths, unfiltered. 
+MATCH (source { qid: 'Q18042037', preflabel: 'NGLY1'}), (target { qid: 'Q14905238', preflabel: 'AQP1'}), path=(source)-[*..3]-(target)
+WITH source, target, path,
+     [r IN relationships(path) | type(r)] AS types
+RETURN source.preflabel AS Source, target.preflabel AS Target, LENGTH(path) AS pathLength, extract(n IN nodes(path)| n.preflabel) AS nodesInPath, types AS edgesInPath, path AS Path
+
+# code for **neo4j_ngly1-aqp1_filtered.csv**: All connections within 3 path lengths, filtered to remove promiscuous pathways.
+# Removes 'cytoplasm', 'cytosol', 'protein coding gene' nodes, since they're generic.
+# Removes any edges where the relationship is 'physically interacts with'
+MATCH (source { qid: 'Q18042037', preflabel: 'NGLY1'}), (target { qid: 'Q14905238', preflabel: 'AQP1'}), path=(source)-[*..3]-(target)
+WITH source, target, path,
+     // mark promiscuous nodes to filter path that contain them out
+     [n IN nodes(path) WHERE n.preflabel IN ['cytoplasm','cytosol','protein coding gene']] AS nodes_marked,
+     // one can use another unique attribute to mark nodes
+     //[n IN nodes(path) WHERE n.qid IN ['Q79899','Q220599','Q30015942']] AS nodes_marked,
+     [r IN relationships(path) | type(r)] AS types,
+     // mark promiscuous edges to filter path that contain them out
+     [r IN relationships(path) WHERE type(r) = 'physically_interacts_with'] AS edges_marked
+// condition to filter paths that do contain marked nodes and edges out
+WHERE size(nodes_marked) = 0 AND size(edges_marked) = 0
+RETURN source.preflabel AS Source, target.preflabel AS Target, LENGTH(path) AS pathLength, extract(n IN nodes(path)| n.preflabel) AS nodesInPath, types AS edgesInPath, path AS Path
+
+# Final tester code; includes physical interactions and also outputs node types.
+MATCH (source { qid: 'Q18042037', preflabel: 'NGLY1'}), (target { qid: 'Q14905238', preflabel: 'AQP1'}), path=(source)-[*..3]-(target)
+WITH source, target, path,
+     // mark promiscuous nodes to filter path that contain them out
+     [n IN nodes(path) WHERE n.preflabel IN ['cytoplasm','cytosol','protein coding gene']] AS nodes_marked,
+     // one can use another unique attribute to mark nodes
+     //[n IN nodes(path) WHERE n.qid IN ['Q79899','Q220599','Q30015942']] AS nodes_marked,
+     [r IN relationships(path) | type(r)] AS types,
+     [r IN relationships(path) WHERE type(r) = 'found_in_taxon'] AS edges_marked
+// condition to filter paths that do contain marked nodes and edges out
+WHERE size(nodes_marked) = 0 AND size(edges_marked) = 0
+RETURN source.preflabel AS Source, target.preflabel AS Target, LENGTH(path) AS pathLength, extract(n IN nodes(path)| n.preflabel) AS nodesInPath, extract(n IN nodes(path)| n.qid) AS nodesQID, extract(n IN nodes(path)| labels(n)) AS nodeType, types AS edgesInPath, path AS Path
+```
+
+
+Import data, cleanup
+```{r import, echo=FALSE, message=FALSE, warning=FALSE}
+library('tidyverse')
+library('rjson')
+library('knitr')
+
+data_dir = '~/GitHub/ngly1-exploration/data/'
+filtered_file = 'neo4j_ngly1-aqp1_3nodes.csv'
+
+df_raw = read_csv(paste0(data_dir, filtered_file))
+
+# split nodes, edges column into separate cols.
+# right now, a little bit clunky and hard-wired, but easier to test as a flat dataframe compared to a nested struct.
+df_raw = df_raw %>% 
+  separate(nodesInPath, sep='","', into = c('n1', 'n2', 'n3', 'n4', 'n5'), remove = FALSE) %>% 
+  separate(nodeType, sep='\"\\],\\[\"', into = c('nt1', 'nt2', 'nt3', 'nt4', 'nt5'), remove = FALSE) %>% 
+  separate(edgesInPath, sep='","', into = c('e1', 'e2', 'e3', 'e4'), remove = FALSE) %>% 
+  mutate(n1 = str_replace_all(n1, '\\[\"', ''),
+         n2 = str_replace_all(n2, '\"\\]', ''),
+         n3 = str_replace_all(n3, '\"\\]', ''),
+         n4 = str_replace_all(n4, '\"\\]', ''),
+         n5 = str_replace_all(n5, '\"\\]', ''),
+         nt1 = str_replace_all(nt1, '\\[\\[\"', ''),
+         nt2 = str_replace_all(nt2, '\"\\]\\]', ''),
+         nt3 = str_replace_all(nt3, '\"\\]\\]', ''),
+         nt4 = str_replace_all(nt4, '\"\\]\\]', ''),
+         nt5 = str_replace_all(nt5, '\"\\]\\]', ''),
+         e1 = str_replace_all(e1, '\\[\"', ''),
+         e2 = str_replace_all(e2, '\"\\]', ''),
+         e3 = str_replace_all(e3, '\"\\]', ''),
+         e4 = str_replace_all(e4, '\"\\]', ''),
+         dupl_n = str_to_lower(n1) == str_to_lower(n2) | 
+           str_to_lower(n1) == str_to_lower(n3) | 
+           str_to_lower(n2) == str_to_lower(n3))
+         # | n1 == n4 | n1 == n5 | n3 == n4 | n4 == n5)
+         # dupl_n = str_to_lower(n1) == str_to_lower(n2))
+```
+
+## First thing to do: eliminate redundant data.
+
+### Entries are not distinct.
+There are multiple copies of the same exact row.
+```{r distinct}
+
+
+
+
+df = df_raw %>% filter(pathLength < 4) %>% select(-Path)
+num_distinct = df %>% distinct() %>% count()  
+df = df %>% distinct()
+
+# holder for the data
+dupes = tribble(
+  ~data, ~length,
+  'original', nrow(df_raw),
+  'duplicates removed', df_raw %>% distinct() %>% count(),
+  '`Path` column and duplicates removed', num_distinct
+  )
+
+kable(dupes, caption = 'Multiple duplicate relationships were removed')
+
+
+```
+
+### Number of direct connections is quite small
+```{r basic_characterization}
+# df is the filtered view of all pathways within 4 connections of NGLY1 ND AQP1.
+
+df %>% count(pathLength) %>% kable()
+
+```
+
+### Similarly, the data fall into several classes very neatly.
+
+```{r classify}
+# remove "encodes" and "ortholog" relationships
+
+df = df %>% rowwise() %>% mutate(type = paste(Source, e1, nt2, e2, nt3, e3, nt4, e4, nt5, sep = "-->"),
+                            type = str_replace_all(type, "-->NA", ""),
+                            type = str_replace_all(type, "-->encodes-->GENE", ""),
+                            type = str_replace_all(type, "-->GENE-->ortholog", "")) %>% 
+  ungroup() %>% mutate(
+                            type_id = dense_rank(type))
+
+df %>% count(type_id, type) %>% arrange(desc(n)) %>% kable()
+
+```
+
+### Let's delve into just one of these categories
+```{r}
+ty1 = df %>% filter(type_id == 8)
+
+nodes = c(ty1 %>% pull(n1), ty1 %>% pull(n2), ty1 %>% pull(n3), ty1 %>% pull(n4), ty1 %>% pull(n5)) %>% data.frame()
+
+colnames(nodes) = 'node'
+
+nodes %>% filter(!is.na(node)) %>% count(node) %>% arrange(desc(n))
+```
+
+
+
