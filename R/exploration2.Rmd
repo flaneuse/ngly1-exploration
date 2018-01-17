@@ -1,0 +1,156 @@
+---
+title: 'NGLY1 exploration: part 2'
+output:
+  html_document:
+    df_print: paged
+---
+
+# Background
+Previously, I looked into a single general query defined by Nuria: how are NGLY1 and AQP1 gene related to each other, within 3 links of each other? Based on that exploration, I identified the following things to change:
+
+1. remove duplicate relationships; add clutter and it's unclear what the directionality of the relationship is.
+2. group "redundant" relationships together; combine orthologues and encoding relationships
+3. categorize types of connections between the terms into semantic groups.
+4. break apart graph network and make more like a parallel coordinates plot, ideally w/ small multiples
+5. create hierarchical filtering: rather than have a single graph, have series of vis to categorize, help whittle down the results.
+
+# These data
+... are based on a more specific, targeted query between keys terms in the NGLY1 pathway. They all have the relationship:
+[source] == [source orthologue] --> [disorder] (physical manifestation / phenotype) --> [gene] == [human orthologue of gene] --> [physiological pathway] --> [target]
+
+# Import + cleanup
+```{r start, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(data.table)
+library(llamar)
+
+data_dir = '~/GitHub/ngly1-exploration/data/input/'
+q1 = read_csv(paste0(data_dir, '2015-01-15_ngly1-engase.csv'))
+
+
+
+node_edge_cols = function(n_nodes){
+  nodes = paste0('node', 1:n_nodes)
+  edges = paste0('edge', 1:(n_nodes-1))
+  
+  q1 %>% 
+  separate(path, sep = '\\},\\{', into = node_edge_cols(4), split = ",")
+  
+  # interleave the nodes and edges together
+  ne = paste(nodes, edges, sep = ',', collapse = ',')
+  
+  # convert to a list
+  ne = str_split(ne, pattern = ',', simplify = TRUE)
+  
+  # remove the last element-- it's a leftover from the fact that nodes/edges are uneven, so R will repeat the first edge.
+  ne = ne[1:(length(ne) - 1)]
+  
+  return(ne)
+}
+
+
+cleanup_neo4j = function(df) {
+  
+}
+```
+```{r}
+q2 = jsonlite::fromJSON(txt=paste0(data_dir, '2018-01-15_NFE2L1-apq1.json'), flatten = TRUE) 
+
+q2 = q2$data[[1]]
+
+convert_graph = function(data) {
+  # interwoven list of nodes and connections
+  row = data %>% data.frame(stringsAsFactors = FALSE)
+  
+  num_entries =  nrow(row)
+  wide = row  %>% 
+    mutate(node_num = ceiling(1:num_entries/2),
+           NE = str_c(c(rep(c('node', 'edge'), floor(num_entries/2)), 'node'), node_num),
+           name = ifelse(NE %like% 'node', preflabel,
+                         ifelse(NE %like% 'edge', property_label, NA)))
+  
+  wide = wide %>% 
+    select(NE, name) %>% 
+    spread(NE, name)
+  
+  return(wide)
+}
+
+long_graph = function(data) {
+  # interwoven list of nodes and connections
+  row = data %>% data.frame(stringsAsFactors = FALSE)
+  
+  num_entries =  nrow(row)
+  
+  long = row  %>% 
+    mutate(node_num = ceiling(1:num_entries/2),
+           NE = c(rep(c('node', 'edge'), floor(num_entries/2)), 'node'),
+           name = ifelse(NE %like% 'node', preflabel,
+                         ifelse(NE %like% 'edge', property_label, NA)),
+                      url = na_if(reference_uri, '<NA>'))
+  
+  long = long %>% 
+    select(node_num, NE, name, url)
+  
+  return(long)
+}
+
+q2_t = lapply(q2, convert_graph) %>% bind_rows() 
+q2_t = q2_t %>% mutate(path_num = 1:nrow(q2_t))
+
+q2_long = lapply(q2, long_graph) %>% bind_rows()  %>% 
+  mutate(path_num = rep(1:length(q2), each = 13)) 
+
+q2_edges = q2_long %>% 
+  filter(NE == 'node') %>% 
+  group_by(path_num) %>% 
+  arrange(node_num, path_num) %>% 
+  # transform into source/targets
+  mutate(source = name,
+         target = lead(name)) %>% 
+  filter(!is.na(target))
+
+# descriptive stats
+n_nodes = q2_long %>% filter(NE == 'node') %>% group_by(node_num) %>% 
+  count(name) %>% 
+  arrange(node_num, desc(n)) %>% 
+  ungroup() %>% 
+  select(-node_num) %>% 
+  rename(value = n)
+kable(n_nodes)
+
+n_edges = q2_edges %>% 
+  ungroup() %>% 
+  group_by(node_num) %>% 
+  count(source, target) %>% 
+  arrange(node_num, desc(n)) %>% 
+    ungroup() %>% 
+  select(-node_num) %>% 
+  mutate(value = 1)
+kable(n_edges)
+
+# double checking that every edge is the same
+q2_long %>% filter(NE == 'edge') %>% group_by(node_num) %>% count(name) %>% arrange(desc(n)) %>% kable()
+```
+```{r export}
+write_csv(n_edges, '~/GitHub/ngly1-exploration/data/output/demo_edges.csv')
+write_csv(n_nodes, '~/GitHub/ngly1-exploration/data/output/demo_nodes.csv')
+x = NULL
+x$nodes = n_nodes
+x$links = n_edges
+jsonlite::write_json(x, '~/GitHub/ngly1-exploration/src/data/demo_graph.json')
+```
+
+
+```{r, plot_nodes}
+ggplot(n_nodes, aes(y = value, x = forcats::fct_reorder(name, value))) + 
+  geom_bar(stat = 'identity') + 
+  coord_flip() +
+  facet_wrap(~node_num, scales = 'free', nrow = 1) +
+  theme_ylab() +
+  theme(panel.spacing = unit(1, 'lines'))
+
+```
+
+
