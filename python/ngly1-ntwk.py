@@ -21,6 +21,9 @@ nodes.head()
 
 # <codecell>
 edges = pd.read_csv('~/GitHub/ngly1/neo4j-community-3.0.3/import/ngly1/ngly1_statements.tsv')
+edges.head()
+
+# %%
 edges = edges[[':START_ID', ':END_ID']].rename(columns = {
 ':START_ID': 'start',
 ':END_ID': 'end'
@@ -35,6 +38,6 @@ esubset.start.value_counts()
 
 #%%
 x = edges[(edges.start =='OMIM:615273') | (edges.end =='OMIM:615273')]
-y = edges[(edges.start =='OMIM:615273') | (edges.end =='OMIM:615273')]
-x.size
+y = edges[(edges.start =='Coriell:GM25331') | (edges.end =='Coriell:GM25331')]
+y.size
 y.head
