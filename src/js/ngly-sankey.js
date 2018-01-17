@@ -10,13 +10,14 @@ var sankey = d3.sankey()
     .nodeWidth(15)
     .nodePadding(10)
     .extent([[1, 1], [width - 200, height - 6]])
+    .iterations(0)
     .nodeId(function(d) { return d.name});
 
 var link = svg.append("g")
     .attr("class", "links")
     .attr("fill", "none")
     .attr("stroke", "#000")
-    .attr("stroke-opacity", 0.2)
+    .attr("stroke-opacity", 0.4)
   .selectAll("path");
 
 var node = svg.append("g")
@@ -25,52 +26,80 @@ var node = svg.append("g")
     .attr("font-size", 10)
   .selectAll("g");
 
+
 d3.json("data/test.json", function(error, energy) {
   if (error) throw error;
 
   console.log(energy)
 
-  // sankey(energy)
-  //
-  //
-  // link = link
-  //   .data(energy.links)
-  //   .enter().append("path")
-  //     .attr("d", d3.sankeyLinkHorizontal())
-  //     .attr('opacity', 0.4)
-  //     .attr("stroke-width", function(d) { return Math.max(1, d.width); });
-  //
-  // link.append("title")
-  //     .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + format(d.value); });
-  //
-  // node = node
-  //   .data(energy.nodes)
-  //   .enter().append("g");
-  //
-  // node.append("rect")
-  //     .attr("x", function(d) { return d.x0; })
-  //     .attr("y", function(d) { return d.y0; })
-  //     .attr("height", function(d) {console.log(d); return d.y1 - d.y0; })
-  //     .attr("width", function(d) { if(d.value > 400) {
-  //       return 15;
-  //     } else {
-  //       return d.value*.6;
-  //     } })
-  //     .attr("fill", function(d) { return color(d.name.replace(/ .*/, "")); })
-  //     .attr("stroke", "#000");
-  //
-  // node.append("text")
-  //     .attr("x", function(d) { return d.x0 - 6; })
-  //     .attr("y", function(d) { return (d.y1 + d.y0) / 2; })
-  //     .attr("dy", "0.35em")
-  //     .attr("text-anchor", "end")
-  //     .text(function(d) { return d.name; })
-  //   .filter(function(d) { return d.x0 < width / 2; })
-  //     .attr("x", function(d) { return d.x1 + 6; })
-  //     .attr("text-anchor", "start");
-  //
-  // node.append("title")
-  //     .text(function(d) { return d.name + "\n" + format(d.value); });
+  sankey(energy)
+
+
+  link = link
+    .data(energy.links)
+    .enter().append("path")
+      .attr("d", d3.sankeyLinkHorizontal())
+      .attr('opacity', 0.05)
+      .attr("stroke-width", function(d) { return Math.max(1, d.width); });
+
+  link.append("title")
+      .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + format(d.value); });
+
+  node = node
+    .data(energy.nodes)
+    .enter().append("g");
+
+  node.append("rect")
+    .attr("id", function(d) { return d.name; })
+      .attr("x", function(d) { return d.x0; })
+      .attr("y", function(d) { return d.y0; })
+      .attr("height", function(d) { return d.y1 - d.y0; })
+      .attr("width", function(d) { if(d.n > 400) {
+        return 15;
+      } else {
+        return d.n*.6;
+      } })
+      // .attr("fill", function(d) { return color(d.name.replace(/ .*/, "")); })
+      .attr("fill", function(d) { return '#ff6574'; })
+      .attr("stroke", "#000");
+
+  node.append("text")
+      .attr("x", function(d) { return d.x0 - 6; })
+      .attr("y", function(d) { return (d.y1 + d.y0) / 2; })
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "end")
+      .text(function(d) { return d.name; })
+    .filter(function(d) { return d.x0 < width / 2; })
+      .attr("x", function(d) { return d.x1 + 6; })
+      .attr("text-anchor", "start");
+
+  node.append("title")
+      .text(function(d) { return d.name + "\n" + format(d.value); });
+
+node.selectAll('text').on('click', function() {
+  d3.select(this).classed('off', !d3.select(this).classed('off'))
+})
+
+node.selectAll('rect').on('click', function() {
+  d3.select(this).classed('off', !d3.select(this).classed('off'))
+})
+
+node.selectAll('rect').on('mouseover', function() {
+  sel_id = this.id;
+
+  d3.selectAll('.links path')
+    .filter(function(d) { return d.source.name == sel_id | d.target.name == sel_id;})
+    .classed('highlight', true);
+
+}).on('mouseout', function() {
+  sel_id = this.id;
+
+  d3.selectAll('.links path')
+    .filter(function(d) { return d.source.name == sel_id | d.target.name == sel_id;})
+    .classed('highlight', false);
+
+})
+
 });
 
 // // -- Determine sizing for plot
