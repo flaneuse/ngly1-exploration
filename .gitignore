@@ -5,3 +5,6 @@
 .DS_Store
 python/.ipynb_checkpoints/find_paths-checkpoint.ipynb
 R/exploration2.nb.html
+src/data/demo_nodes.csv
+src/data/energy.json
+src/data/test.json

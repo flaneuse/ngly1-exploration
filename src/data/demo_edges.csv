@@ -1,0 +1,266 @@
+node_num,source,target,n
+1,NFE2L1,Nfe2l1,1464
+2,Nfe2l1,homeostasis/metabolism phenotype,276
+2,Nfe2l1,Hyperinsulinemia,164
+2,Nfe2l1,Insulin resistance,128
+2,Nfe2l1,Hepatic steatosis,120
+2,Nfe2l1,Hepatic fibrosis,100
+2,Nfe2l1,Hyperglycemia,88
+2,Nfe2l1,decreased embryo size,56
+2,Nfe2l1,Hepatic necrosis,56
+2,Nfe2l1,embryonic growth retardation,52
+2,Nfe2l1,oxidative stress,52
+2,Nfe2l1,Abnormal glucose homeostasis,36
+2,Nfe2l1,decreased circulating glucose level,36
+2,Nfe2l1,growth/size/body region phenotype,36
+2,Nfe2l1,abnormal pancreatic beta cell morphology,32
+2,Nfe2l1,Hepatitis,32
+2,Nfe2l1,Hepatocellular carcinoma,32
+2,Nfe2l1,increased nucleated erythrocyte cell number,28
+2,Nfe2l1,abnormal blood homeostasis,24
+2,Nfe2l1,decreased hematocrit,24
+2,Nfe2l1,increased circulating alanine transaminase level,24
+2,Nfe2l1,increased liver weight,24
+2,Nfe2l1,increased circulating aspartate transaminase level,20
+2,Nfe2l1,Hypoinsulinemia,12
+2,Nfe2l1,Pallor,8
+2,Nfe2l1,small liver,4
+3,homeostasis/metabolism phenotype,Aqp4,104
+3,Hyperinsulinemia,Aqp7,64
+3,Hepatic fibrosis,CAV1,60
+3,Hepatic steatosis,CAV1,60
+3,Hyperglycemia,CAV1,60
+3,Hyperinsulinemia,CAV1,60
+3,Insulin resistance,CAV1,60
+3,homeostasis/metabolism phenotype,Aqp8,56
+3,abnormal pancreatic beta cell morphology,Egfr,32
+3,decreased embryo size,Egfr,32
+3,growth/size/body region phenotype,Egfr,32
+3,homeostasis/metabolism phenotype,Egfr,32
+3,embryonic growth retardation,Jun,28
+3,Hepatic fibrosis,NFE2L2,28
+3,Hepatic necrosis,Jun,28
+3,Hepatic necrosis,NFE2L2,28
+3,Hepatic steatosis,NFE2L2,28
+3,Hepatocellular carcinoma,NFE2L2,28
+3,increased nucleated erythrocyte cell number,Jun,28
+3,Insulin resistance,NFE2L2,28
+3,oxidative stress,Jun,28
+3,abnormal blood homeostasis,Cav1,24
+3,Abnormal glucose homeostasis,Cav1,24
+3,decreased circulating glucose level,Cav1,24
+3,decreased hematocrit,Nfe2l2,24
+3,Hepatic steatosis,Nfe2l2,24
+3,Hepatitis,Nfe2l2,24
+3,homeostasis/metabolism phenotype,Cav1,24
+3,homeostasis/metabolism phenotype,Nfe2l2,24
+3,Hyperglycemia,Cav1,24
+3,Hyperinsulinemia,Cav1,24
+3,increased circulating alanine transaminase level,Nfe2l2,24
+3,increased liver weight,Cav1,24
+3,Insulin resistance,Cav1,24
+3,oxidative stress,Nfe2l2,24
+3,homeostasis/metabolism phenotype,Aqp11,20
+3,increased circulating aspartate transaminase level,Aqp11,20
+3,Abnormal glucose homeostasis,Gsk3b,12
+3,decreased circulating glucose level,Gsk3b,12
+3,homeostasis/metabolism phenotype,Gsk3b,12
+3,Hyperinsulinemia,Stx4a,12
+3,Hypoinsulinemia,Gsk3b,12
+3,Insulin resistance,Stx4a,12
+3,decreased embryo size,Exoc4,8
+3,decreased embryo size,Fbxw7,8
+3,decreased embryo size,Hcfc1,8
+3,embryonic growth retardation,Elavl1,8
+3,embryonic growth retardation,Fbxw7,8
+3,Pallor,Fbxw7,8
+3,embryonic growth retardation,Derl1,4
+3,embryonic growth retardation,Mdfi,4
+3,growth/size/body region phenotype,App,4
+3,Hepatic fibrosis,Amfr,4
+3,Hepatic fibrosis,FOS,4
+3,Hepatic fibrosis,TCF4,4
+3,Hepatic steatosis,Amfr,4
+3,Hepatic steatosis,FOS,4
+3,Hepatitis,Amfr,4
+3,Hepatitis,TCF4,4
+3,Hepatocellular carcinoma,TCF4,4
+3,homeostasis/metabolism phenotype,App,4
+3,Hyperglycemia,FOS,4
+3,Hyperinsulinemia,FOS,4
+3,Insulin resistance,FOS,4
+3,small liver,Siah1a,4
+4,CAV1,Cav1,300
+4,NFE2L2,Nfe2l2,140
+4,Cav1,Cav1,96
+4,Cav1,CAV1,96
+4,Egfr,EGFR,80
+4,Nfe2l2,Nfe2l2,72
+4,Nfe2l2,NFE2L2,72
+4,Aqp4,AQP4,68
+4,Jun,JUN,64
+4,Egfr,Egfr,48
+4,Aqp8,AQP8,44
+4,Aqp7,AQP7,36
+4,Aqp11,AQP11,32
+4,Gsk3b,Gsk3b,32
+4,Jun,Jun,32
+4,Aqp4,Aqp4,24
+4,FOS,Fos,20
+4,Aqp7,Aqp7,16
+4,Gsk3b,GSK3B,16
+4,Jun,jun,16
+4,Stx4a,Stx4,16
+4,Amfr,AMFR,12
+4,Aqp4,aqp4,12
+4,Aqp7,aqp7,12
+4,Fbxw7,Fbxw7,12
+4,Fbxw7,FBXW7,12
+4,TCF4,Tcf4,12
+4,App,App,8
+4,Aqp11,Aqp11,8
+4,Aqp8,aqp8a.1,8
+4,Elavl1,elavl1a,8
+4,Exoc4,Sec8,8
+4,Hcfc1,HCFC1,8
+4,Stx4a,STX4,8
+4,Aqp8,Aqp8,4
+4,Derl1,DERL1,4
+4,Mdfi,MDFI,4
+4,Siah1a,SIAH1,4
+5,Cav1,basal plasma membrane,92
+5,Cav1,cellular response to mechanical stimulus,92
+5,Cav1,response to estrogen,92
+5,Nfe2l2,cellular response to hydrogen peroxide,84
+5,Nfe2l2,positive regulation of angiogenesis,84
+5,Nfe2l2,cellular response to hypoxia,44
+5,Cav1,basolateral plasma membrane,40
+5,CAV1,identical protein binding,32
+5,CAV1,integral component of plasma membrane,32
+5,CAV1,response to estrogen,32
+5,NFE2L2,cellular response to hydrogen peroxide,24
+5,NFE2L2,cellular response to hypoxia,24
+5,NFE2L2,positive regulation of angiogenesis,24
+5,Cav1,apical plasma membrane,20
+5,Cav1,identical protein binding,20
+5,Cav1,integral component of plasma membrane,20
+5,Cav1,wound healing,20
+5,Fos,response to drug,20
+5,AQP11,Passive transport by Aquaporins,16
+5,AQP4,Passive transport by Aquaporins,16
+5,AQP4,Vasopressin regulates renal water homeostasis via Aquaporins,16
+5,AQP7,Passive transport by Aquaporins,16
+5,AQP8,Passive transport by Aquaporins,16
+5,Egfr,cellular response to dexamethasone stimulus,16
+5,Egfr,cellular response to mechanical stimulus,16
+5,Egfr,positive regulation of fibroblast proliferation,16
+5,EGFR,apical plasma membrane,16
+5,EGFR,basolateral plasma membrane,16
+5,EGFR,cellular response to dexamethasone stimulus,16
+5,EGFR,nuclear membrane,16
+5,EGFR,wound healing,16
+5,Gsk3b,cellular response to hydrogen peroxide,16
+5,Gsk3b,cellular response to mechanical stimulus,16
+5,GSK3B,negative regulation of apoptotic process,16
+5,jun,response to drug,16
+5,Jun,positive regulation of epithelial cell migration,16
+5,Jun,positive regulation of fibroblast proliferation,16
+5,JUN,identical protein binding,16
+5,JUN,positive regulation of epithelial cell migration,16
+5,JUN,positive regulation of fibroblast proliferation,16
+5,JUN,response to drug,16
+5,AMFR,identical protein binding,12
+5,Fbxw7,cellular response to UV,12
+5,FBXW7,identical protein binding,12
+5,Tcf4,identical protein binding,12
+5,App,cellular response to cAMP,8
+5,Aqp11,glycerol transport,8
+5,AQP11,Aquaporin-mediated transport,8
+5,AQP11,Transmembrane transport of small molecules,8
+5,aqp7,glycerol transmembrane transporter activity,8
+5,elavl1a,positive regulation of angiogenesis,8
+5,Stx4,basolateral plasma membrane,8
+5,Stx4,sarcolemma,8
+5,STX4,basolateral plasma membrane,8
+5,aqp4,basolateral plasma membrane,4
+5,aqp4,integral component of plasma membrane,4
+5,aqp4,water transmembrane transporter activity,4
+5,Aqp4,basal plasma membrane,4
+5,Aqp4,carbon dioxide transport,4
+5,Aqp4,hyperosmotic salinity response,4
+5,Aqp4,multicellular organismal water homeostasis,4
+5,Aqp4,renal water absorption,4
+5,Aqp4,sarcolemma,4
+5,AQP4,Aquaporin-mediated transport,4
+5,AQP4,basolateral plasma membrane,4
+5,AQP4,Bile secretion,4
+5,AQP4,integral component of plasma membrane,4
+5,AQP4,multicellular organismal water homeostasis,4
+5,AQP4,renal water homeostasis,4
+5,AQP4,Transmembrane transport of small molecules,4
+5,AQP4,water transmembrane transporter activity,4
+5,AQP4,water transport,4
+5,aqp7,water transmembrane transporter activity,4
+5,Aqp7,brush border membrane,4
+5,Aqp7,glycerol transport,4
+5,Aqp7,renal water absorption,4
+5,Aqp7,water transport,4
+5,AQP7,Aquaporin-mediated transport,4
+5,AQP7,glycerol transport,4
+5,AQP7,integral component of plasma membrane,4
+5,AQP7,Transmembrane transport of small molecules,4
+5,AQP7,water transport,4
+5,Aqp8,cellular response to cAMP,4
+5,AQP8,apical part of cell,4
+5,AQP8,Aquaporin-mediated transport,4
+5,AQP8,Bile secretion,4
+5,AQP8,cellular response to cAMP,4
+5,AQP8,integral component of plasma membrane,4
+5,AQP8,Transmembrane transport of small molecules,4
+5,AQP8,water transport,4
+5,aqp8a.1,integral component of plasma membrane,4
+5,aqp8a.1,water transmembrane transporter activity,4
+5,DERL1,Transmembrane transport of small molecules,4
+5,HCFC1,axon,4
+5,HCFC1,identical protein binding,4
+5,MDFI,identical protein binding,4
+5,Sec8,apical plasma membrane,4
+5,Sec8,basal plasma membrane,4
+5,SIAH1,identical protein binding,4
+6,cellular response to hydrogen peroxide,AQP1,124
+6,cellular response to mechanical stimulus,AQP1,124
+6,response to estrogen,AQP1,124
+6,identical protein binding,AQP1,116
+6,positive regulation of angiogenesis,AQP1,116
+6,basal plasma membrane,AQP1,100
+6,basolateral plasma membrane,AQP1,80
+6,integral component of plasma membrane,AQP1,72
+6,cellular response to hypoxia,AQP1,68
+6,Passive transport by Aquaporins,AQP1,64
+6,response to drug,AQP1,52
+6,positive regulation of fibroblast proliferation,AQP1,48
+6,apical plasma membrane,AQP1,40
+6,wound healing,AQP1,36
+6,cellular response to dexamethasone stimulus,AQP1,32
+6,positive regulation of epithelial cell migration,AQP1,32
+6,Transmembrane transport of small molecules,AQP1,24
+6,Aquaporin-mediated transport,AQP1,20
+6,cellular response to cAMP,AQP1,16
+6,glycerol transport,AQP1,16
+6,negative regulation of apoptotic process,AQP1,16
+6,nuclear membrane,AQP1,16
+6,Vasopressin regulates renal water homeostasis via Aquaporins,AQP1,16
+6,water transmembrane transporter activity,AQP1,16
+6,water transport,AQP1,16
+6,cellular response to UV,AQP1,12
+6,sarcolemma,AQP1,12
+6,Bile secretion,AQP1,8
+6,glycerol transmembrane transporter activity,AQP1,8
+6,multicellular organismal water homeostasis,AQP1,8
+6,renal water absorption,AQP1,8
+6,apical part of cell,AQP1,4
+6,axon,AQP1,4
+6,brush border membrane,AQP1,4
+6,carbon dioxide transport,AQP1,4
+6,hyperosmotic salinity response,AQP1,4
+6,renal water homeostasis,AQP1,4
