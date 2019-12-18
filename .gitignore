@@ -8,3 +8,5 @@ R/exploration2.nb.html
 src/data/demo_nodes.csv
 src/data/energy.json
 src/data/test.json
+data/output/demo_edges.csv
+data/output/demo_nodes.csv

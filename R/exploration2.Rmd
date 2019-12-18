@@ -34,9 +34,6 @@ node_edge_cols = function(n_nodes){
   nodes = paste0('node', 1:n_nodes)
   edges = paste0('edge', 1:(n_nodes-1))
   
-  q1 %>% 
-  separate(path, sep = '\\},\\{', into = node_edge_cols(4), split = ",")
-  
   # interleave the nodes and edges together
   ne = paste(nodes, edges, sep = ',', collapse = ',')
   
@@ -48,6 +45,9 @@ node_edge_cols = function(n_nodes){
   
   return(ne)
 }
+
+  q1 %>% 
+  separate(path, sep = '\\},\\{', into = node_edge_cols(4), split = ",")
 
 
 cleanup_neo4j = function(df) {
@@ -116,7 +116,7 @@ n_nodes = q2_long %>% filter(NE == 'node') %>% group_by(node_num) %>%
   count(name) %>% 
   arrange(node_num, desc(n)) %>% 
   ungroup() %>% 
-  select(-node_num) %>% 
+  # select(-node_num) %>% 
   rename(value = n)
 kable(n_nodes)
 
@@ -126,7 +126,7 @@ n_edges = q2_edges %>%
   count(source, target) %>% 
   arrange(node_num, desc(n)) %>% 
     ungroup() %>% 
-  select(-node_num) %>% 
+  # select(-node_num) %>% 
   mutate(value = 1)
 kable(n_edges)
 

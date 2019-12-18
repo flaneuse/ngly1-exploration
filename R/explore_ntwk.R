@@ -14,7 +14,8 @@ library(GGally)
 # Pulled from [Nuria's repo](https://github.com/NuriaQueralt/ngly1/tree/master/neo4j-community-3.0.3/import/ngly1)
 # on 8 December 2017
 nodes = read_csv('~/GitHub/ngly1/neo4j-community-3.0.3/import/ngly1/ngly1_concepts.tsv') %>% 
-  rename(id = `id:ID`)
+  rename(id = `id:ID`,
+         label = `:LABEL`)
 
 edges = read_csv('~/GitHub/ngly1/neo4j-community-3.0.3/import/ngly1/ngly1_statements.tsv') %>% 
   rename(start_id = `:START_ID`,
